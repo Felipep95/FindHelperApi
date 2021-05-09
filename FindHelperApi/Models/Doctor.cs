@@ -8,6 +8,7 @@ namespace FindHelperApi.Models
 {
     public class Doctor
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "Nome")]

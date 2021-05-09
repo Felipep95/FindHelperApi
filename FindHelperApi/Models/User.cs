@@ -4,6 +4,7 @@ namespace FindHelperApi.Models
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         [Display(Name = "Nome")]
