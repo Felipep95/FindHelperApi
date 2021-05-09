@@ -21,7 +21,7 @@ namespace FindHelperApi.Models
         [Display(Name = "Senha")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "O Campo Senha é obrigatório.")]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "A senha precisa ter no mínimo {1} caracteres.")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "A senha precisa ter no mínimo {2} caracteres.")]
         public string Password { get; set; }
 
         //[Display(Name = "Confirmar senha")]

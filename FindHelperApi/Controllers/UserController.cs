@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FindHelperApi.Models;
 using FindHelperApi.Services;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace FindHelperApi.Controllers
 {
@@ -17,15 +18,26 @@ namespace FindHelperApi.Controllers
             _userService = userService;
         }
 
+        //[HttpPost]
+        //[Route("login")]
+        //public ActionResult<User> Login(User user)
+        //{
+        //    var userAuthenticate = _userService.Login(user);
+        //    return user;
+        //}
+
         [HttpPost]
         [Route("register")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<User> Create(User user)
         {
             if (!ModelState.IsValid)
                 throw new Exception();
 
              _userService.Insert(user);
-            return StatusCode(201);
+
+            return CreatedAtAction(nameof(Create), new { id = user.Id }, user);
         }
 
         [HttpGet]
@@ -50,7 +62,7 @@ namespace FindHelperApi.Controllers
 
         //TODO: create route GetByName
         [HttpGet]
-        [Route("{name:string}")]
+        [Route("{name}")]
         public ActionResult<User> GetByName(string name)
         {
             var user = _userService.FindByName(name);
@@ -59,7 +71,7 @@ namespace FindHelperApi.Controllers
                 return NotFound();
 
             return Ok(user);
-        }
+        }//TODO: fix function... implements how to get user by name with entity framework
 
     }
 }

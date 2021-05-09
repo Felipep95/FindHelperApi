@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using FindHelperApi.Data;
+using FindHelperApi.Services;
 
 namespace FindHelperApi
 {
@@ -26,8 +27,9 @@ namespace FindHelperApi
                     builder.MigrationsAssembly("FindHelperApi")));
 
             services.AddScoped<FindHelperApiContext, FindHelperApiContext>();
-            
-                services.AddControllers();
+            services.AddScoped<UserService, UserService>();
+
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FindHelperApi", Version = "v1" });
