@@ -1,10 +1,10 @@
-﻿using System;
+﻿using FindHelperApi.Data;
+using FindHelperApi.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FindHelperApi.Data;
-using FindHelperApi.Models;
-using Microsoft.EntityFrameworkCore;
 using BC = BCrypt.Net.BCrypt;
 
 
