@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FindHelperApi.Models
 {
@@ -18,6 +19,7 @@ namespace FindHelperApi.Models
         [StringLength(100, MinimumLength = 5, ErrorMessage = "O Email deve ter no mínimo {1} e no máximo {0} caracteres.")]
         public string Email { get; set; }
 
+        [JsonIgnore]
         [Display(Name = "Senha")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "O Campo Senha é obrigatório.")]
