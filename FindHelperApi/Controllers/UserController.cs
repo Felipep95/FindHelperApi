@@ -4,6 +4,7 @@ using FindHelperApi.Models;
 using FindHelperApi.Services;
 using System;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace FindHelperApi.Controllers
 {
@@ -30,29 +31,29 @@ namespace FindHelperApi.Controllers
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<User> Create(User user)
+        public async Task<ActionResult<User>> Create(User user)
         {
             if (!ModelState.IsValid)
                 throw new Exception();
 
-             _userService.Insert(user);
+             await _userService.InsertAsync(user);
 
             return CreatedAtAction(nameof(Create), new { id = user.Id }, user);
         }
 
         [HttpGet]
         [Route("all")]
-        public ActionResult<List<User>> GetAll()
+        public async Task<ActionResult<List<User>>> GetAll()
         {
-            var users =  _userService.FindAll();
+            var users =  await _userService.FindAllAsync();
             return Ok(users);
         }
 
         [HttpGet]
         [Route("{id:int}")]
-        public ActionResult<User> GetByid(int id)
+        public async Task<ActionResult<User>> GetByid(int id)
         {
-            var user = _userService.FindById(id);
+            var user = await _userService.FindByIdAsync(id);
             
             if (user == null)
                 return NotFound();
