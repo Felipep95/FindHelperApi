@@ -13,7 +13,7 @@ namespace FindHelperApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        
+
         public UserController(UserService userService)
         {
             _userService = userService;
@@ -34,9 +34,9 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<User>> Create(User user)
         {
             if (!ModelState.IsValid)
-                throw new Exception();
+                return BadRequest();
 
-             await _userService.InsertAsync(user);
+            await _userService.InsertAsync(user);
 
             return CreatedAtAction(nameof(Create), new { id = user.Id }, user);
         }
@@ -45,16 +45,18 @@ namespace FindHelperApi.Controllers
         [Route("all")]
         public async Task<ActionResult<List<User>>> GetAll()
         {
-            var users =  await _userService.FindAllAsync();
+            var users = await _userService.FindAllAsync();
             return Ok(users);
         }
 
         [HttpGet]
         [Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<User>> GetByid(int id)
         {
             var user = await _userService.FindByIdAsync(id);
-            
+
             if (user == null)
                 return NotFound();
 

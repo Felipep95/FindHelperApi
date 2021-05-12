@@ -29,6 +29,8 @@ namespace FindHelperApi
             services.AddScoped<FindHelperApiContext, FindHelperApiContext>();
             services.AddScoped<UserService, UserService>();
             services.AddScoped<PublicationService, PublicationService>();
+            services.AddScoped<FriendRequestService, FriendRequestService>();
+            services.AddScoped<FriendListService, FriendListService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

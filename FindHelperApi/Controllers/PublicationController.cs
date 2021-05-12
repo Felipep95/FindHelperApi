@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FindHelperApi.Controllers
 {
-    
+
     [ApiController]
     [Route("v1/publication")]
     public class PublicationController : ControllerBase
@@ -23,10 +22,12 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Publication>> Create(Publication publication)
         {
-            if (!ModelState.IsValid)
-                throw new Exception();
+            if (!ModelState.IsValid || publication == null)
+                return BadRequest();
 
             await _publicationService.InsertAsync(publication);
 
