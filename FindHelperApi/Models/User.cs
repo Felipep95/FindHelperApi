@@ -10,7 +10,7 @@ namespace FindHelperApi.Models
 
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "O Campo nome é obrigatório.")]
-        [RegularExpression(@"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Números e caracteres especiais não são permitidos no nome.")]
+        [RegularExpression(@"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Números e caracteres especiais não são permitidos no nome.")]//corrigir regex para permitir caracteres especiais
         public string Name { get; set; }
 
         [Display(Name = "Email")]
@@ -19,7 +19,7 @@ namespace FindHelperApi.Models
         [StringLength(100, MinimumLength = 5, ErrorMessage = "O Email deve ter no mínimo {1} e no máximo {0} caracteres.")]
         public string Email { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [Display(Name = "Senha")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "O Campo Senha é obrigatório.")]

@@ -39,11 +39,12 @@ namespace FindHelperApi.Controllers
             }
             else
             {
-                await _friendRequestService.RemoveAsync(friendRequest.Id);
+                await _friendRequestService.RemoveAsync(friendRequest.Id);//return notfound ou bad request
+                return BadRequest();
             }
             return friendRequest;
         }
-
+            
         [HttpGet]
         [Route("all")]
         public async Task<ActionResult<List<FriendRequest>>> GetAll()
