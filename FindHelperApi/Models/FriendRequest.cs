@@ -12,7 +12,7 @@ namespace FindHelperApi.Models
         
         public int UserIdReceveidSolicitation { get; set; } // ID do Usuário que recebeu a solicitação de amizade
         
-        [JsonIgnore]
+        //[JsonIgnore]
         public User User { get; set; }
 
         public bool Status { get; set; } // Indica se o usuário aceitou ou não a solicitação

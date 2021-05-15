@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace FindHelperApi.Controllers
 {
     [ApiController]
-    [Route("v1/friendRequest")]
+    [Route("friendRequest")]
     public class FriendRequestController : ControllerBase
     {
         private readonly FriendRequestService _friendRequestService;

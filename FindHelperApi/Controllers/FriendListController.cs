@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FindHelperApi.Controllers
 {
-    [Route("api/friendList")]
+    [Route("friendList")]
     [ApiController]
     public class FriendListController : ControllerBase
     {

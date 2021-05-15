@@ -22,7 +22,8 @@ namespace FindHelperApi.Models
 
         //[JsonIgnore]
         public int UserId { get; set; }
-        [JsonIgnore]
+        
+        //[JsonIgnore]
         public User User { get; set; }
 
         //[Display(Name = "Foto")]

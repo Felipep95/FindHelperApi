@@ -7,7 +7,7 @@ namespace FindHelperApi.Controllers
 {
     
     [ApiController]
-    [Route("api/area")]
+    [Route("area")]
     public class AreaController : ControllerBase
     {
         private readonly AreaService _areaService;

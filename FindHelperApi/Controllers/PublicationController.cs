@@ -10,7 +10,7 @@ namespace FindHelperApi.Controllers
 {
 
     [ApiController]
-    [Route("v1/publication")]
+    [Route("publication")]
     public class PublicationController : ControllerBase
     {
         private readonly PublicationService _publicationService;

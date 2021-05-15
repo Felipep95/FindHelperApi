@@ -10,7 +10,7 @@ namespace FindHelperApi.Models
         public int UserId { get; set; }//usuário que enviou a solicitação de amizade
         public int UserFriendId  { get; set; }//usuário que aceitou a solicitação de amizade
         
-        [JsonIgnore]
+        //[JsonIgnore]
         public User User { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FindHelperApi.Controllers
 {
     [ApiController]
-    [Route("v1/user")]
+    [Route("user")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -17,14 +17,6 @@ namespace FindHelperApi.Controllers
         {
             _userService = userService;
         }
-
-        //[HttpPost]
-        //[Route("login")]
-        //public ActionResult<User> Login(User user)
-        //{
-        //    var userAuthenticate = _userService.Login(user);
-        //    return user;
-        //}
 
         [HttpPost]
         [Route("register")]
@@ -63,17 +55,13 @@ namespace FindHelperApi.Controllers
         }
 
         //TODO: create route GetByName
-        [HttpGet]
-        [Route("{name}")]
-        public ActionResult<User> GetByName(string name)
-        {
-            var user = _userService.FindByName(name);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
-        }//TODO: fix function... implements how to get user by name with entity framework
+        //[HttpGet]
+        //[Route("name")]
+        //public ActionResult<List<User>> GetByName()
+        //{
+        //    var users = _userService.FindAllByName();
+        //    return Ok(users);
+        //}//TODO: fix function... implements how to get user by name with entity framework
 
     }
 }

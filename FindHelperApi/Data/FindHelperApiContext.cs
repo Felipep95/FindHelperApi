@@ -5,6 +5,11 @@ namespace FindHelperApi.Data
 {
     public class FindHelperApiContext : DbContext
     {
+        public FindHelperApiContext()
+        {
+
+        }
+
         public FindHelperApiContext(DbContextOptions<FindHelperApiContext> options)
             : base(options)
         {
