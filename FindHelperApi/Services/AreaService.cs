@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace FindHelperApi.Services
 {
-    public class DoctorService
+    public class AreaService
     {
         private readonly FindHelperApiContext _context;
 
-        public DoctorService(FindHelperApiContext context)
+        public AreaService(FindHelperApiContext context)
         {
             _context = context;
         }
 
-        public async Task InsertAsync(Doctor doctor)
+        public async Task InsertAsync(Area area)
         {
-            _context.Add(doctor);
+             _context.Add(area);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Doctor>> FindAllAsync() => await _context.Doctors.ToListAsync();
-
-        public async Task<Doctor> FindByIdAsync(int id) => await _context.Doctors.FindAsync(id);
+        public async Task<List<Area>> FindAllAsync() =>  await _context.Areas.ToListAsync();
+        
     }
 }

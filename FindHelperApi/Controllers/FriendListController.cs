@@ -26,12 +26,18 @@ namespace FindHelperApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var friendList = new FriendList();
-
-            friendList.UserFriendId = friendRequest.UserIdReceveidSolicitation;
-            friendList.UserId = friendRequest.UserIdSolicitation;
-
-            await _friendListService.InsertAsync(friendList);
+            if (friendRequest.Status == true)
+            {
+                var friendList = new FriendList();
+                friendList.UserFriendId = friendRequest.UserIdReceveidSolicitation;
+                friendList.UserId = friendRequest.UserIdSolicitation;
+                await _friendListService.InsertAsync(friendList);
+            }
+            else
+            {
+                return Problem(statusCode: 400, title:"solicitação de amizade recusada");
+            }
+           
             return CreatedAtAction(nameof(Create), new { id = friendRequest.Id,}, friendRequest);
         }
 

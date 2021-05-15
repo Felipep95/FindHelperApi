@@ -15,5 +15,6 @@ namespace FindHelperApi.Data
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<FriendList> FriendLists { get; set; }
         public DbSet<Publication> Publications { get; set; }
+        public DbSet<Area> Areas { get; set; }
     }
 }

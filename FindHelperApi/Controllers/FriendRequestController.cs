@@ -1,7 +1,6 @@
 ﻿using FindHelperApi.Models;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,24 +24,29 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<FriendRequest>> Create(FriendRequest friendRequest)
         {
             if (!ModelState.IsValid)
-                throw new Exception();
+                return Problem(statusCode: 400, title: "Algum dado inserido está em um formato incorreto");
 
-            if (friendRequest.Status == true)
-            {
-                var friendList = new FriendList();
-                friendList.UserFriendId = friendRequest.UserIdReceveidSolicitation;
-                friendList.UserId = friendRequest.UserIdSolicitation;
-                // se o status do friendRequest for true, então adicionar o UserIdSolicitation e UserIdReceveidSolicitation na tabela FriendList
-                //await _friendRequestService.InsertAsync(friendRequest);
-                await _friendListService.InsertAsync(friendList);
-                return CreatedAtAction(nameof(Create), new { id = friendRequest.Id }, friendRequest);
-            }
-            else
-            {
-                await _friendRequestService.RemoveAsync(friendRequest.Id);//return notfound ou bad request
-                return BadRequest();
-            }
-            return friendRequest;
+            await _friendRequestService.InsertAsync(friendRequest);
+            return CreatedAtAction(nameof(Create), new { id = friendRequest.Id }, friendRequest);
+
+            #region GetFriendRequestResponse
+            //if (friendRequest.Status == true)
+            //{
+            //    var friendList = new FriendList();
+            //    friendList.UserFriendId = friendRequest.UserIdReceveidSolicitation;
+            //    friendList.UserId = friendRequest.UserIdSolicitation;
+            //    // se o status do friendRequest for true, então adicionar o UserIdSolicitation e UserIdReceveidSolicitation na tabela FriendList
+            //    //await _friendRequestService.InsertAsync(friendRequest);
+            //    await _friendListService.InsertAsync(friendList);
+            //    return CreatedAtAction(nameof(Create), new { id = friendRequest.Id }, friendRequest);
+            //}
+            //else
+            //{
+            //    await _friendRequestService.RemoveAsync(friendRequest.Id);//return notfound ou bad request
+            //    return BadRequest();
+            //}
+            //return friendRequest;
+            #endregion
         }
             
         [HttpGet]

@@ -15,7 +15,7 @@ namespace FindHelperApi.Models
         [JsonIgnore]
         public User User { get; set; }
 
-        public bool Status { get; set; } // Indica se o usuário aceitou ou não solicitação
+        public bool Status { get; set; } // Indica se o usuário aceitou ou não a solicitação
 
     }
 }

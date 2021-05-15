@@ -1,3 +1,5 @@
+using FindHelperApi.Data;
+using FindHelperApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using FindHelperApi.Data;
-using FindHelperApi.Services;
 
 namespace FindHelperApi
 {
@@ -32,6 +32,7 @@ namespace FindHelperApi
             services.AddScoped<FriendRequestService, FriendRequestService>();
             services.AddScoped<FriendListService, FriendListService>();
             services.AddScoped<DoctorService, DoctorService>();
+            services.AddScoped<AreaService, AreaService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
