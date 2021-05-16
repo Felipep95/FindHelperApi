@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Models;
+using FindHelperApi.Models.DTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +20,29 @@ namespace FindHelperApi.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
+        public ActionResult<GETUserDTO> Login(LOGINUserDTO userDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("email ou senha incorreto");//TODO: tratar exceptions de erro de login.
+
+            var userAuthenticated = _userService.Login(userDTO);
+
+            return userAuthenticated;
+        }
+
+        [HttpPost]
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<User>> Create(User user)
+        public async Task<ActionResult<User>> Create(CREATEUserDTO userDTO)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return Problem(statusCode: 400, title: "email ou senha incorreto");
 
-            await _userService.InsertAsync(user);
-
-            return CreatedAtAction(nameof(Create), new { id = user.Id }, user);
+            var userCreated = await _userService.InsertAsync(userDTO);
+            
+            return CreatedAtAction(nameof(Create), new { id = userCreated.Id }, userCreated);
         }
 
         [HttpGet]
@@ -44,7 +57,7 @@ namespace FindHelperApi.Controllers
         [Route("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<User>> GetByid(int id)
+        public async Task<ActionResult<GETUserDTO>> GetByid(int id)
         {
             var user = await _userService.FindByIdAsync(id);
 

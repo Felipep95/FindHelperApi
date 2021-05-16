@@ -35,10 +35,9 @@ namespace FindHelperApi
             services.AddScoped<FriendListService, FriendListService>();
             services.AddScoped<DoctorService, DoctorService>();
             services.AddScoped<AreaService, AreaService>();
-            services.AddScoped<UserAuthenticationService, UserAuthenticationService>();
 
             services.AddDirectoryBrowser();
-
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

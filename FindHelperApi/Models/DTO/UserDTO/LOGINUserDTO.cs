@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace FindHelperApi.Models
+namespace FindHelperApi.Models.DTO
 {
-    public class UserAuthentication
+    public class LOGINUserDTO
     {
-        public int Id { get; set; }
 
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "E-mail em formato inválido.")]

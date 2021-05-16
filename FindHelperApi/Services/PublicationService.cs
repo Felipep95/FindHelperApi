@@ -1,16 +1,14 @@
-﻿using Azure.Storage.Blobs;
-using FindHelperApi.Data;
+﻿using FindHelperApi.Data;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -19,12 +17,14 @@ namespace FindHelperApi.Services
     public class PublicationService
     {
         private readonly FindHelperApiContext _context;
-        public static IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public PublicationService(FindHelperApiContext context, IWebHostEnvironment webHostEnvironment)
+        public PublicationService(FindHelperApiContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         public async Task<GETPublicationDTO> SaveAsync(CreatePublicationDTO publicationDTO, IFormFile file)
@@ -38,8 +38,8 @@ namespace FindHelperApi.Services
 
             _context.Publications.Add(newPublication);
             await _context.SaveChangesAsync();
-            
-           // _context.Publications.Where(p => p.Id == newPublication.Id);
+
+            // _context.Publications.Where(p => p.Id == newPublication.Id);
 
             var getPublicationDTO = new GETPublicationDTO();
 
@@ -47,11 +47,32 @@ namespace FindHelperApi.Services
             getPublicationDTO.Description = newPublication.Description;
             getPublicationDTO.Photo = newPublication.Photo;
             getPublicationDTO.Id = newPublication.Id;
-
+            getPublicationDTO.UserId = newPublication.UserId;
+            
             return getPublicationDTO;
         }
 
-        public async Task<List<Publication>> FindAllAsync() => await _context.Publications.ToListAsync();
+        public async Task<List<GETPublicationDTO>> FindAllAsync() ///*await _context.Publications.ToListAsync();*/
+        {
+            var publications = await _context.Publications.ToListAsync();
+
+            var listGetPublicationDto = new List<GETPublicationDTO>();
+
+            for (int i = 0; i < publications.Count(); i++)
+            {
+                var newGetPublicationDto = new GETPublicationDTO();
+
+                newGetPublicationDto.Id = publications[i].Id;
+                newGetPublicationDto.Data = publications[i].Date;
+                newGetPublicationDto.Description = publications[i].Description;
+                newGetPublicationDto.Photo = GetImageFromWwwroot(publications[i].Photo);
+                newGetPublicationDto.UserId = publications[i].UserId;
+
+                listGetPublicationDto.Add(newGetPublicationDto);
+            }
+
+            return listGetPublicationDto;
+        }
 
         public string SaveImage(IFormFile objectFile)
         {
@@ -66,7 +87,7 @@ namespace FindHelperApi.Services
                         Directory.CreateDirectory(path);
                     }
 
-                    using (FileStream fileStream = System.IO.File.Create(path + objectFile.FileName))
+                    using (FileStream fileStream = File.Create(path + objectFile.FileName))
                     {
                         objectFile.CopyTo(fileStream);
                         fileStream.Flush();
@@ -80,28 +101,17 @@ namespace FindHelperApi.Services
             }
             catch (Exception ex)
             {
-
                 return ex.Message;
             }
         }
 
-        //public string UploadBase64Image(string base64Image, string container)
-        //{
-        //    // Gera um nome randomico para imagem
-        //    var fileName = Guid.NewGuid().ToString() + ".jpg";
-
-        //    // Limpa o hash enviado
-        //    var data = new Regex(@"^data:image/[a-z]+;base64,").Replace(base64Image, "");
-
-        //    // Gera um array de Bytes
-        //    byte[] imageBytes = Convert.FromBase64String(data);
-
-        //    // Define o BLOB no qual a imagem será armazenada
-        //    var blobClient = new BlobClient("SUA CONN STRING", container, fileName);
-
-        //    // Envia a imagem
-        //    using (var stream = new MemoryStream(imageBytes)) { blobClient.Upload(stream); }
-        //}
+        //https://stackoverflow.com/questions/42587428/get-image-from-wwwroot-images-in-asp-net-core
+        public string GetImageFromWwwroot(string image)
+        {
+            var pathServer = _configuration.GetValue<string>("MySettings:PathsServer");
+            var path = "https://" + pathServer + "/images/" + image;
+            return path;
+        }
     }
 }
 
