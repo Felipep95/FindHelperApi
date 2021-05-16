@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.IO;
 
 namespace FindHelperApi
 {
@@ -35,6 +37,8 @@ namespace FindHelperApi
             services.AddScoped<AreaService, AreaService>();
             services.AddScoped<UserAuthenticationService, UserAuthenticationService>();
 
+            services.AddDirectoryBrowser();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -62,6 +66,10 @@ namespace FindHelperApi
             {
                 endpoints.MapControllers();
             });
+
+            app.UseStaticFiles();
+
+
         }
     }
 }

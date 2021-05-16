@@ -9,7 +9,7 @@ namespace FindHelperApi.Models
 
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "O Campo nome é obrigatório.")]
-        [RegularExpression(@"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Números e caracteres especiais não são permitidos no nome.")]//corrigir regex para permitir caracteres especiais
+        //[RegularExpression(@"^[a-zA-Z''-'\s]{1,40}$", ErrorMessage = "Números e caracteres especiais não são permitidos no nome.")]//corrigir regex para permitir caracteres especiais
         public string Name { get; set; }
 
         [Display(Name = "Email")]
