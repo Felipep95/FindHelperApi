@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Models;
+using FindHelperApi.Models.DTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -19,14 +20,14 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult> Create(Area area)
+        public async Task<ActionResult<Area>> Create(CREATEAreaDTO area)
         {
             if (!ModelState.IsValid)
                 return Problem(statusCode: 400, title: "o dado inserido está em um formato incorreto");
 
-            await _areaService.InsertAsync(area);
+            var createdArea = await _areaService.InsertAsync(area);
 
-            return CreatedAtAction(nameof(Create), new { id = area.Id }, area);
+            return CreatedAtAction(nameof(Create), new { id = createdArea.Id }, createdArea);
         }
 
         [HttpGet]

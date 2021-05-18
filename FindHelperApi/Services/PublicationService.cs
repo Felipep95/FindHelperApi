@@ -39,20 +39,18 @@ namespace FindHelperApi.Services
             _context.Publications.Add(newPublication);
             await _context.SaveChangesAsync();
 
-            // _context.Publications.Where(p => p.Id == newPublication.Id);
-
             var getPublicationDTO = new GETPublicationDTO();
 
-            getPublicationDTO.Data = newPublication.Date;
-            getPublicationDTO.Description = newPublication.Description;
-            getPublicationDTO.Photo = newPublication.Photo;
             getPublicationDTO.Id = newPublication.Id;
+            getPublicationDTO.Description = newPublication.Description;
+            getPublicationDTO.Data = newPublication.Date;
+            getPublicationDTO.Photo = newPublication.Photo;
             getPublicationDTO.UserId = newPublication.UserId;
             
             return getPublicationDTO;
         }
 
-        public async Task<List<GETPublicationDTO>> FindAllAsync() ///*await _context.Publications.ToListAsync();*/
+        public async Task<List<GETPublicationDTO>> FindAllAsync()
         {
             var publications = await _context.Publications.ToListAsync();
 

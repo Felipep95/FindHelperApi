@@ -1,5 +1,6 @@
 ﻿using FindHelperApi.Data;
 using FindHelperApi.Models;
+using FindHelperApi.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,10 +16,16 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public async Task InsertAsync(Area area)
+        public async Task<Area> InsertAsync(CREATEAreaDTO areaDto)
         {
-             _context.Add(area);
+            var createdArea = new Area();
+
+            createdArea.Name = areaDto.Name;
+             
+            _context.Add(createdArea);
             await _context.SaveChangesAsync();
+
+            return createdArea;
         }
 
         public async Task<List<Area>> FindAllAsync() =>  await _context.Areas.ToListAsync();

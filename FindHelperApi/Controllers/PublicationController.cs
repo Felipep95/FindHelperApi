@@ -45,23 +45,5 @@ namespace FindHelperApi.Controllers
             var publications = await _publicationService.FindAllAsync();
             return Ok(publications);
         }
-
-        //public string UploadedFile(PublicationDTO publication)
-        //{
-        //    string unicFileName = null;
-
-        //    if (publication.Photo != null)
-        //    {
-        //        string filePhoto = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-        //        unicFileName = Guid.NewGuid().ToString() + "_" + publication.Photo.FileName;
-        //        string filePath = Path.Combine(filePhoto, unicFileName);
-        //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            publication.Photo.CopyTo(fileStream);
-        //        }
-        //    }
-
-        //    return unicFileName;
-        //}
     }
 }

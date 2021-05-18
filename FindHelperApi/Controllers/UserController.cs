@@ -38,7 +38,7 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<User>> Create(CREATEUserDTO userDTO)
         {
             if (!ModelState.IsValid)
-                return Problem(statusCode: 400, title: "email ou senha incorreto");
+                return Problem(statusCode: 400, title: "email ou senha incorreto");//TODO: revisar
 
             var userCreated = await _userService.InsertAsync(userDTO);
             

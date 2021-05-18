@@ -1,5 +1,6 @@
 ﻿using FindHelperApi.Data;
 using FindHelperApi.Models;
+using FindHelperApi.Models.DTO.DoctorDTO;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,10 +16,19 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public async Task InsertAsync(Doctor doctor)
+        public async Task<Doctor> InsertAsync(CREATEDoctorDTO doctorDto)
         {
+            var doctor = new Doctor();
+
+            doctor.Name = doctorDto.Name;
+            doctor.Email = doctorDto.Email;
+            doctor.Experience = doctorDto.Experience;
+            doctor.CRM = doctorDto.CRM;
+
             _context.Add(doctor);
             await _context.SaveChangesAsync();
+
+            return doctor;
         }
 
         public async Task<List<Doctor>> FindAllAsync() => await _context.Doctors.ToListAsync();
