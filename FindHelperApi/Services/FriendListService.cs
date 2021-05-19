@@ -1,5 +1,7 @@
 ﻿using FindHelperApi.Data;
 using FindHelperApi.Models;
+using FindHelperApi.Models.DTO.FriendListDTO;
+using FindHelperApi.Models.DTO.FriendRequestDTO;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,10 +17,24 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public async Task InsertAsync(FriendList friendList)
+        public async Task<GETFriendListDTO> InsertAsync(CREATEFriendRequestDTO friendRequestDTO)
         {
-            _context.Add(friendList);
+            var newFriendList = new FriendList();
+
+            newFriendList.UserId = friendRequestDTO.UserIdReceveidSolicitation;
+            newFriendList.UserFriendId = friendRequestDTO.UserIdSolicitation;
+            
+            _context.FriendLists.Add(newFriendList);
             await _context.SaveChangesAsync();
+
+            var getFriendList = new GETFriendListDTO();
+            
+            getFriendList.Id = newFriendList.Id;
+            getFriendList.UserId = newFriendList.UserId;
+            getFriendList.UserFriendId = newFriendList.UserFriendId;
+
+            return getFriendList;
+
         }
 
         public async Task<List<FriendList>> FindAllAsync() => await _context.FriendLists.ToListAsync();

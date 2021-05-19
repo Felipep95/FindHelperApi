@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Models;
+using FindHelperApi.Models.DTO.FriendRequestDTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -21,13 +22,13 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<FriendRequest>> Create(FriendRequest friendRequest)
+        public async Task<ActionResult<GETFriendRequestDTO>> Create(CREATEFriendRequestDTO friendRequestDTO)
         {
             if (!ModelState.IsValid)
-                return Problem(statusCode: 400, title: "Algum dado inserido está em um formato incorreto");
+                return Problem(statusCode: 400, title: "Formato de dado inválido");
 
-            await _friendRequestService.InsertAsync(friendRequest);
-            return CreatedAtAction(nameof(Create), new { id = friendRequest.Id }, friendRequest);
+            var createdFriendRequest = await _friendRequestService.InsertAsync(friendRequestDTO);
+            return CreatedAtAction(nameof(Create), new { id = createdFriendRequest.Id }, createdFriendRequest);
 
             #region GetFriendRequestResponse
             //if (friendRequest.Status == true)
