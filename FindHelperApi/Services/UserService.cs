@@ -1,16 +1,20 @@
 ﻿using FindHelperApi.Data;
-using FindHelperApi.Helper;
+using FindHelperApi.Helper.ValidateDataAnotations;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Http;
 using BC = BCrypt.Net.BCrypt;
 
+
+//http://www.macoratti.net/13/12/c_vdda.htm
 
 namespace FindHelperApi.Services
 {
@@ -29,7 +33,7 @@ namespace FindHelperApi.Services
             bool isValidPassword = BC.Verify(userDTO.Password, user.Password);
 
             if (!isValidPassword)
-                throw new Exceptions("email ou senha incorreto");
+                throw new Exception("Erro: email ou senha incorreto(a)");
 
             var getUserDto = new GETUserDTO();
             getUserDto.Id = user.Id;
@@ -44,7 +48,7 @@ namespace FindHelperApi.Services
             var users = await _context.Users.ToListAsync();
 
             var listGetUser = new List<GETUserDTO>();
-            
+
             for (int i = 0; i < users.Count(); i++)
             {
                 var newGetuserDto = new GETUserDTO();
@@ -63,6 +67,9 @@ namespace FindHelperApi.Services
         {
             var user = await _context.Users.FindAsync(id);
 
+            if (user == null)
+                throw new Exception("Usuário não encontrado");
+
             var getUserDto = new GETUserDTO();
 
             getUserDto.Id = user.Id;
@@ -72,13 +79,15 @@ namespace FindHelperApi.Services
             return getUserDto;
         }
 
-        public async Task<GETUserDTO> InsertAsync(CREATEUserDTO userDTO)
+        public async Task<GETUserDTO> InsertAsync(CREATEUserDTO userDTO)//TODO: insert custom exception to invalid ModelState also create functions to check if unique data exists in database, for example telephone,email...
         {
             var user = new User();
 
             user.Name = userDTO.Name;
             user.Email = userDTO.Email;
             user.Password = BC.HashPassword(userDTO.Password);
+
+            //await ValidateUser(user);
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -121,5 +130,22 @@ namespace FindHelperApi.Services
         //    _context.Users.Remove(obj);
         //    await _context.SaveChangesAsync();
         //}
+
+
+        // function to custom validate errors message from data annotations in models
+        //private async Task ValidateUser(object obj, HttpContext httpContext)
+        //{
+        //    var errors = Validate.getValidationErros(obj);
+        //    var responseError = "";
+
+        //    foreach (var error in errors)
+        //    {
+        //         responseError = error.ErrorMessage;
+        //    }
+
+        //    var errorJson = JsonSerializer.Serialize(responseError);
+        //    await httpContext.Response.WriteAsync(errorJson);
+        //}
     }
 }
+

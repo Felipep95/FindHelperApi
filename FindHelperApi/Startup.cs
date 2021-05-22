@@ -1,4 +1,5 @@
 using FindHelperApi.Data;
+using FindHelperApi.Helper.CustomExceptions;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,8 @@ namespace FindHelperApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

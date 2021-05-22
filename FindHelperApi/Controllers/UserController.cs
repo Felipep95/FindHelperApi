@@ -3,6 +3,7 @@ using FindHelperApi.Models.DTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,11 +24,7 @@ namespace FindHelperApi.Controllers
         [Route("login")]
         public ActionResult<GETUserDTO> Login(LOGINUserDTO userDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("email ou senha incorreto");//TODO: tratar exceptions de erro de login.
-
             var userAuthenticated = _userService.Login(userDTO);
-
             return userAuthenticated;
         }
 
@@ -38,10 +35,10 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<User>> Create(CREATEUserDTO userDTO)
         {
             if (!ModelState.IsValid)
-                return Problem(statusCode: 400, title: "email ou senha incorreto");//TODO: revisar
+                throw new Exception("Os dados inseridos estão em um formato incorreto.");//TODO: create custom exceptions for each field in model.
 
             var userCreated = await _userService.InsertAsync(userDTO);
-            
+
             return CreatedAtAction(nameof(Create), new { id = userCreated.Id }, userCreated);
         }
 
@@ -60,14 +57,10 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<GETUserDTO>> GetByid(int id)
         {
             var user = await _userService.FindByIdAsync(id);
-
-            if (user == null)
-                return NotFound();
-
             return Ok(user);
         }
 
-        //TODO: create route GetByName
+        #region (opcional)getByName
         //[HttpGet]
         //[Route("name")]
         //public ActionResult<List<User>> GetByName()
@@ -75,6 +68,7 @@ namespace FindHelperApi.Controllers
         //    var users = _userService.FindAllByName();
         //    return Ok(users);
         //}//TODO: fix function... implements how to get user by name with entity framework
+        #endregion
 
     }
 }
