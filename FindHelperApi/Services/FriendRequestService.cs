@@ -2,7 +2,6 @@
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO.FriendRequestDTO;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;

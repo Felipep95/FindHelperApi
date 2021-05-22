@@ -3,6 +3,7 @@ using FindHelperApi.Models.DTO.DoctorDTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace FindHelperApi.Controllers
@@ -25,7 +26,7 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<Doctor>> Create(CREATEDoctorDTO doctorDto)
         {
             if (!ModelState.IsValid || doctorDto == null)
-                return BadRequest();
+                throw new Exception("Os dados inseridos estão inválidos");
 
             var createdDoctor = await _doctorService.InsertAsync(doctorDto);
 

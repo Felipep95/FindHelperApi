@@ -2,6 +2,7 @@
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO.DoctorDTO;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,6 +34,14 @@ namespace FindHelperApi.Services
 
         public async Task<List<Doctor>> FindAllAsync() => await _context.Doctors.ToListAsync();
 
-        public async Task<Doctor> FindByIdAsync(int id) => await _context.Doctors.FindAsync(id);
+        public async Task<Doctor> FindByIdAsync(int id)
+        {
+            var doctor = await _context.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                throw new Exception("Médico não encontrado");
+
+            return doctor;
+        }
     }
 }
