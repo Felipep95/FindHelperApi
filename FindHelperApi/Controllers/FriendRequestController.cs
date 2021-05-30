@@ -22,7 +22,7 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<GETFriendRequestDTO>> Create(CREATEFriendRequestDTO friendRequestDTO)
+        public async Task<ActionResult/*<GETFriendRequestDTO>*/> Create(CREATEFriendRequestDTO friendRequestDTO)
         {
             if (!ModelState.IsValid)
                 return Problem(statusCode: 400, title: "Formato de dado inválido");
