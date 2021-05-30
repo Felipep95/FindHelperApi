@@ -21,7 +21,7 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public async Task <GETFriendRequestDTO> InsertAsync(CREATEFriendRequestDTO friendRequestDTO)
+        public async Task<GETFriendRequestDTO> InsertAsync(CREATEFriendRequestDTO friendRequestDTO)
         {
 
             var requestExist = _context.FriendRequests
@@ -32,6 +32,8 @@ namespace FindHelperApi.Services
             {
                 requestExist.Status = false;
                 _context.FriendRequests.Update(requestExist);
+                await _context.SaveChangesAsync();
+
 
                 var createdFriendRequest = new GETFriendRequestDTO();
 
@@ -66,49 +68,39 @@ namespace FindHelperApi.Services
 
                 return createdFriendRequest;
             }
+        }
 
-            
+        public async Task<GETFriendRequestDTO> FriendRequestResponse(CREATEFriendRequestDTO friendRequestDTO)
+        {
+            var userFriendRequest = _context.FriendRequests
+                       .Where(x => x.UserIdReceveidSolicitation == friendRequestDTO.UserIdReceveidSolicitation && x.UserIdSolicitation == friendRequestDTO.UserIdSolicitation)
+                       .FirstOrDefault<FriendRequest>();
 
-            //if (createdFriendRequest.Status == false)
-            //{
-            //    _context.FriendRequests.Add(createdFriendRequest);
-            //    await _context.SaveChangesAsync();
-            //}
-            //else
-            //{
-            //    //var userFriendListAndRequest = new CREATEFriendListAndFriendRequestDTO();
-            //    var addToFriendList = new FriendList();
+            if (userFriendRequest == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            else if (userFriendRequest.Status == true)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                userFriendRequest.Status = true;
+                userFriendRequest.isFriend = friendRequestDTO.IsFriend;
+                 _context.FriendRequests.Update(userFriendRequest);
+                await _context.SaveChangesAsync();
 
-            //    addToFriendList.UserFriendId = createdFriendRequest.UserIdReceveidSolicitation;
-            //    addToFriendList.UserId = createdFriendRequest.UserIdSolicitation; 
+                var getFriendRequestDTO = new GETFriendRequestDTO();
+                getFriendRequestDTO.Id = userFriendRequest.Id;
+                getFriendRequestDTO.UserIdSolicitation = userFriendRequest.UserIdSolicitation;
+                getFriendRequestDTO.UserIdReceveidSolicitation = userFriendRequest.UserIdReceveidSolicitation;
+                getFriendRequestDTO.Status = userFriendRequest.Status;
+                getFriendRequestDTO.IsFriend = userFriendRequest.isFriend;
 
-            //    _context.FriendLists.Add(addToFriendList);
-            //    await _context.SaveChangesAsync();
+                return getFriendRequestDTO;
 
-            //    _context.FriendRequests.Remove(createdFriendRequest);
-                
-            //}
-
-            //_context.Add(createdFriendRequest);
-            //await _context.SaveChangesAsync();
-
-            //var getCreatedFriendRequest = new GETFriendRequestDTO();
-
-            //getCreatedFriendRequest.Id = createdFriendRequest.Id;
-            //getCreatedFriendRequest.UserIdSolicitation = createdFriendRequest.UserIdSolicitation;
-            //getCreatedFriendRequest.UserIdReceveidSolicitation = createdFriendRequest.UserIdReceveidSolicitation;
-            //getCreatedFriendRequest.Status = createdFriendRequest.Status;
-
-            //return getCreatedFriendRequest;
-
-            //if (friendRequestDTO.Status == true)
-            //{
-               
-            //}
-            //else
-            //{
-            //    throw new HttpResponseException(HttpStatusCode.NoContent); //https://docs.microsoft.com/en-us/aspnet/web-api/overview/error-handling/exception-handling
-            //}
+            }
         }
 
         public async Task<List<FriendRequest>> FindAllAsync() => await _context.FriendRequests.ToListAsync();

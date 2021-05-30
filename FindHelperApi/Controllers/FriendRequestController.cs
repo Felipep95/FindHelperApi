@@ -42,6 +42,17 @@ namespace FindHelperApi.Controllers
             var friendRequests = await _friendRequestService.FindAllAsync();
             return Ok(friendRequests);
         }
+
+        [HttpPut]
+        [Route("update")]
+        public async Task<ActionResult<GETFriendRequestDTO>> Update(CREATEFriendRequestDTO friendRequestDTO)
+        {
+            if (!ModelState.IsValid)
+                return Problem(statusCode: 400, title: "Formato de dado inválido");
+
+            var updatedFriendRequest = await _friendRequestService.FriendRequestResponse(friendRequestDTO);
+            return CreatedAtAction(nameof(Create), new { id = updatedFriendRequest.Id }, updatedFriendRequest);
+        }
     }
 }
 
