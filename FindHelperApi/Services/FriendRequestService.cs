@@ -5,6 +5,7 @@ using FindHelperApi.Models.DTO.FriendListDTO;
 using FindHelperApi.Models.DTO.FriendRequestDTO;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -20,37 +21,73 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public async Task/*<GETFriendRequestDTO>*/ InsertAsync(CREATEFriendRequestDTO friendRequestDTO)
+        public async Task <GETFriendRequestDTO> InsertAsync(CREATEFriendRequestDTO friendRequestDTO)
         {
-            var createdFriendRequest = new FriendRequest();
 
-            //TODO: default value to status always false... if value is equal true, then save user's id on friendlist table
-            // if status == true, then save on friendlist, else delete from friend request
-            // SAVE IN FRIEND REQUEST IF STATUS == FALSE, ELSE SAVE IN FRIENDLIST 
+            var requestExist = _context.FriendRequests
+                       .Where(x => x.UserIdReceveidSolicitation == friendRequestDTO.UserIdReceveidSolicitation && x.UserIdSolicitation == friendRequestDTO.UserIdSolicitation)
+                       .FirstOrDefault<FriendRequest>();
 
-            createdFriendRequest.UserIdSolicitation = friendRequestDTO.UserIdSolicitation;
-            createdFriendRequest.UserIdReceveidSolicitation = friendRequestDTO.UserIdReceveidSolicitation;
-            createdFriendRequest.Status = friendRequestDTO.Status;
-
-            if (createdFriendRequest.Status == false)
+            if (requestExist?.Status == true)
             {
-                _context.FriendRequests.Add(createdFriendRequest);
-                await _context.SaveChangesAsync();
+                requestExist.Status = false;
+                _context.FriendRequests.Update(requestExist);
+
+                var createdFriendRequest = new GETFriendRequestDTO();
+
+                createdFriendRequest.Id = requestExist.Id;
+                createdFriendRequest.UserIdSolicitation = requestExist.UserIdSolicitation;
+                createdFriendRequest.UserIdReceveidSolicitation = requestExist.UserIdReceveidSolicitation;
+                createdFriendRequest.Status = requestExist.Status;
+
+                return createdFriendRequest;
+            }
+            else if (requestExist?.Status == false)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
             else
             {
-                //var userFriendListAndRequest = new CREATEFriendListAndFriendRequestDTO();
-                var addToFriendList = new FriendList();
+                var newFriendRequest = new FriendRequest();
+                newFriendRequest.UserIdReceveidSolicitation = friendRequestDTO.UserIdReceveidSolicitation;
+                newFriendRequest.UserIdSolicitation = friendRequestDTO.UserIdSolicitation;
+                newFriendRequest.Status = false;
+                newFriendRequest.isFriend = false;
 
-                addToFriendList.UserFriendId = createdFriendRequest.UserIdReceveidSolicitation;
-                addToFriendList.UserId = createdFriendRequest.UserIdSolicitation; 
-
-                _context.FriendLists.Add(addToFriendList);
+                _context.FriendRequests.Add(newFriendRequest);
                 await _context.SaveChangesAsync();
 
-                _context.FriendRequests.Remove(createdFriendRequest);
-                
+                var createdFriendRequest = new GETFriendRequestDTO();
+
+                createdFriendRequest.Id = newFriendRequest.Id;
+                createdFriendRequest.UserIdSolicitation = newFriendRequest.UserIdSolicitation;
+                createdFriendRequest.UserIdReceveidSolicitation = newFriendRequest.UserIdReceveidSolicitation;
+                createdFriendRequest.Status = newFriendRequest.Status;
+
+                return createdFriendRequest;
             }
+
+            
+
+            //if (createdFriendRequest.Status == false)
+            //{
+            //    _context.FriendRequests.Add(createdFriendRequest);
+            //    await _context.SaveChangesAsync();
+            //}
+            //else
+            //{
+            //    //var userFriendListAndRequest = new CREATEFriendListAndFriendRequestDTO();
+            //    var addToFriendList = new FriendList();
+
+            //    addToFriendList.UserFriendId = createdFriendRequest.UserIdReceveidSolicitation;
+            //    addToFriendList.UserId = createdFriendRequest.UserIdSolicitation; 
+
+            //    _context.FriendLists.Add(addToFriendList);
+            //    await _context.SaveChangesAsync();
+
+            //    _context.FriendRequests.Remove(createdFriendRequest);
+                
+            //}
 
             //_context.Add(createdFriendRequest);
             //await _context.SaveChangesAsync();
