@@ -22,9 +22,9 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult<GETUserDTO> Login(LOGINUserDTO userDTO)
+        public async Task<ActionResult<GETUserDTO>> Login(LOGINUserDTO userDTO)
         {
-            var userAuthenticated = _userService.Login(userDTO);
+            var userAuthenticated = await _userService.Login(userDTO);
             return userAuthenticated;
         }
 
@@ -35,11 +35,11 @@ namespace FindHelperApi.Controllers
         public async Task<ActionResult<User>> Create(CREATEUserDTO userDTO)
         {
             if (!ModelState.IsValid)
-                throw new Exception("Os dados inseridos estão em um formato incorreto.");//TODO: create custom exceptions for each field in model.
+                throw new Exception("Os dados inseridos estão em formato incorreto, verifique os dados e tente novamente.");
 
             var userCreated = await _userService.InsertAsync(userDTO);
 
-            return CreatedAtAction(nameof(Create), new { id = userCreated.Id }, userCreated);
+            return CreatedAtAction(nameof(GetByid), new { id = userCreated.Id }, userCreated);
         }
 
         [HttpGet]
@@ -63,9 +63,9 @@ namespace FindHelperApi.Controllers
         #region (opcional)getByName
         //[HttpGet]
         //[Route("name")]
-        //public ActionResult<List<User>> GetByName()
+        //public ActionResult<List<User>> GetByName(string name)
         //{
-        //    var users = _userService.FindAllByName();
+        //    var users = _userService.GetByName(name);
         //    return Ok(users);
         //}//TODO: fix function... implements how to get user by name with entity framework
         #endregion

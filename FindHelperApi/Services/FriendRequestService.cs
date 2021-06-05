@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Data;
+using FindHelperApi.Helper.CustomExceptions;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO;
 using FindHelperApi.Models.DTO.FriendListDTO;
@@ -26,14 +27,13 @@ namespace FindHelperApi.Services
 
             var requestExist = _context.FriendRequests
                        .Where(x => x.UserIdReceveidSolicitation == friendRequestDTO.UserIdReceveidSolicitation && x.UserIdSolicitation == friendRequestDTO.UserIdSolicitation)
-                       .FirstOrDefault<FriendRequest>();
+                       .FirstOrDefault();
 
             if (requestExist?.Status == true)
             {
                 requestExist.Status = false;
                 _context.FriendRequests.Update(requestExist);
                 await _context.SaveChangesAsync();
-
 
                 var createdFriendRequest = new GETFriendRequestDTO();
 
@@ -74,11 +74,11 @@ namespace FindHelperApi.Services
         {
             var userFriendRequest = _context.FriendRequests
                        .Where(x => x.UserIdReceveidSolicitation == friendRequestDTO.UserIdReceveidSolicitation && x.UserIdSolicitation == friendRequestDTO.UserIdSolicitation)
-                       .FirstOrDefault<FriendRequest>();
+                       .FirstOrDefault();
 
             if (userFriendRequest == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
             }
             else if (userFriendRequest.Status == true)
             {

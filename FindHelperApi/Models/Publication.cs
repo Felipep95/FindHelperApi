@@ -6,7 +6,7 @@ namespace FindHelperApi.Models
 {
     public class Publication
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
         
         [Display(Name = "Descrição")]

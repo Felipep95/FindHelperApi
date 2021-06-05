@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Data;
+using FindHelperApi.Helper.CustomExceptions;
 using FindHelperApi.Helper.ValidateDataAnotations;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -27,13 +29,14 @@ namespace FindHelperApi.Services
             _context = context;
         }
 
-        public GETUserDTO Login(LOGINUserDTO userDTO)
+        public async Task<GETUserDTO> Login(LOGINUserDTO userDTO)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Email == userDTO.Email);
-            bool isValidPassword = BC.Verify(userDTO.Password, user.Password);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == userDTO.Email);
 
-            if (!isValidPassword)
-                throw new Exception("Erro: email ou senha incorreto(a)");
+            var isValidUser = user != null ? BC.Verify(userDTO.Password, user.Password) : throw new HttpStatusException(HttpStatusCode.BadRequest, "Erro: Email ou senha incorreto(a)");
+
+            if (!isValidUser)
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Erro: Email ou senha incorreto(a)");
 
             var getUserDto = new GETUserDTO();
             getUserDto.Id = user.Id;
@@ -68,8 +71,7 @@ namespace FindHelperApi.Services
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
-                throw new Exception("Usuário não encontrado");
-            //return NotFound("Usuário não encontrado");
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Usuário não encontrado");
 
             var getUserDto = new GETUserDTO();
 
@@ -120,9 +122,14 @@ namespace FindHelperApi.Services
         //}
         #endregion
 
-        //public async Task FindAllByName() => await _context.Users.Select(u => u.Name).ToListAsync();
+        //    public async Task FindAllByName() => await _context.Users.Select(u => u.Name).ToListAsync();
+        //    {
+        //       return _context.Users.FromSqlRaw("SELECT Name FROM Users ORDER BY Name").ToListAsync();
+        //}
+
+        //public GETUserDTO GetByName(string name)
         //{
-        //   return _context.Users.FromSqlRaw("SELECT Name FROM Users ORDER BY Name").ToListAsync();
+        //    //TODO
         //}
 
         //public async Task RemoveAsync(int id)

@@ -4,7 +4,7 @@ namespace FindHelperApi.Models
 {
     public class Area
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O Campo nome é obrigatório.")]

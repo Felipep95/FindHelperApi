@@ -1,9 +1,11 @@
 ﻿using FindHelperApi.Data;
+using FindHelperApi.Helper.CustomExceptions;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO.DoctorDTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FindHelperApi.Services
@@ -39,7 +41,7 @@ namespace FindHelperApi.Services
             var doctor = await _context.Doctors.FindAsync(id);
 
             if (doctor == null)
-                throw new Exception("Médico não encontrado");
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Médico não encontrado");
 
             return doctor;
         }

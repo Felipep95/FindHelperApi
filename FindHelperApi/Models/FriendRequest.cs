@@ -5,7 +5,7 @@ namespace FindHelperApi.Models
 {
     public class FriendRequest
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
         
         public int UserIdSolicitation { get; set; } //ID do Usuário logado no APP

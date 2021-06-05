@@ -1,4 +1,5 @@
 ﻿using FindHelperApi.Data;
+using FindHelperApi.Helper.CustomExceptions;
 using FindHelperApi.Models;
 using FindHelperApi.Models.DTO.FriendListDTO;
 using FindHelperApi.Models.DTO.FriendRequestDTO;
@@ -25,18 +26,11 @@ namespace FindHelperApi.Services
         {
             var requestExist = _context.FriendRequests
                        .Where(x => x.UserIdReceveidSolicitation == friendRequestDTO.UserIdReceveidSolicitation && x.UserIdSolicitation == friendRequestDTO.UserIdSolicitation)
-                       .FirstOrDefault<FriendRequest>();
+                       .FirstOrDefault();
 
             if (requestExist == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-                //var response = new HttpResponseMessage(HttpStatusCode.NotFound)
-                //{
-                //    Content = new StringContent("Não foi possível encontrar a solicitação de amizade", System.Text.Encoding.UTF8, "text/plain"),
-                //    StatusCode = HttpStatusCode.NotFound
-                //};
-
-                //throw new HttpResponseException(response);
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
             }
             else if (requestExist.Status == true && requestExist.isFriend == true)
             {
@@ -58,12 +52,11 @@ namespace FindHelperApi.Services
             }
             else if (requestExist.Status == true && requestExist.isFriend == false)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Solicitação de amizade recusada");
             }
             else
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Pedido de amizade pendente");
             }
         }
 
