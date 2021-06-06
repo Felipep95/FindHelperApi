@@ -30,7 +30,7 @@ namespace FindHelperApi.Services
 
             if (requestExist == null)
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
             }
             else if (requestExist.Status == true && requestExist.isFriend == true)
             {
@@ -52,11 +52,11 @@ namespace FindHelperApi.Services
             }
             else if (requestExist.Status == true && requestExist.isFriend == false)
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Solicitação de amizade recusada");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, "Solicitação de amizade recusada");
             }
             else
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Pedido de amizade pendente");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, "Pedido de amizade pendente");
             }
         }
 

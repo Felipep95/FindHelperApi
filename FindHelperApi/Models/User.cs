@@ -15,14 +15,15 @@ namespace FindHelperApi.Models
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "E-mail em formato inválido.")]
         [Required(ErrorMessage = "O Campo Email é obrigatório.")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "O Email deve ter no mínimo {1} e no máximo {0} caracteres.")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "O Email deve ter no mínimo 5 e no máximo 100 caracteres.")]
         public string Email { get; set; }
 
         //[JsonIgnore]
         [Display(Name = "Senha")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "O Campo Senha é obrigatório.")]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "A senha precisa ter no mínimo {2} caracteres.")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "A senha precisa ter no mínimo {2} caracteres")]
+        //[PasswordValidate]
         public string Password { get; set; }
 
         //[Display(Name = "Confirmar senha")]
@@ -31,4 +32,20 @@ namespace FindHelperApi.Models
         //[Compare("Password", ErrorMessage = "A senha e a senha de confirmação não correspondem.")]
         //public string ConfirmPassword { get; set; }
     }
+
+
+    // return the same as Data Annotations... is just a simple alternative to use data annotations...great to use when have a group of validation to the same property.
+    //public class PasswordValidate : ValidationAttribute
+    //{
+    //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    //    {
+    //        var user = (User)validationContext.ObjectInstance;
+
+    //        if (user.Password.Length < 8)
+    //            return new ValidationResult("A senha precisa ter no mínimo 8 caracteres");
+
+    //        return ValidationResult.Success;
+            
+    //    }
+    //}
 }

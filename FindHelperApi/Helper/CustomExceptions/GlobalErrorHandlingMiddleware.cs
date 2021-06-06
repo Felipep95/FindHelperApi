@@ -29,7 +29,7 @@ namespace FindHelperApi.Helper.CustomExceptions
                 var response = context.Response;
                 response.ContentType = "application/json";
 
-                switch(ex)
+                switch (ex)
                 {
                     case StatusCode400:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -38,14 +38,14 @@ namespace FindHelperApi.Helper.CustomExceptions
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     default:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }
 
                 var errorResponse = new
                 {
                     message = ex.Message,
-                    //statusCode = response.StatusCode
+                    statusCode = response.StatusCode
                 };
 
                 var errorJson = JsonSerializer.Serialize(errorResponse);

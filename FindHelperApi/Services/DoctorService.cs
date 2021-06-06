@@ -41,7 +41,7 @@ namespace FindHelperApi.Services
             var doctor = await _context.Doctors.FindAsync(id);
 
             if (doctor == null)
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Médico não encontrado");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, "Médico não encontrado");
 
             return doctor;
         }

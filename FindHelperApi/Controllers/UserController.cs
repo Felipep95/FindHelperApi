@@ -1,10 +1,12 @@
-﻿using FindHelperApi.Models;
+﻿using FindHelperApi.Helper.CustomExceptions;
+using FindHelperApi.Models;
 using FindHelperApi.Models.DTO;
 using FindHelperApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FindHelperApi.Controllers
@@ -30,15 +32,11 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<User>> Create(CREATEUserDTO userDTO)
         {
-            if (!ModelState.IsValid)
-                throw new Exception("Os dados inseridos estão em formato incorreto, verifique os dados e tente novamente.");
-
             var userCreated = await _userService.InsertAsync(userDTO);
-
             return CreatedAtAction(nameof(GetByid), new { id = userCreated.Id }, userCreated);
         }
 
@@ -65,7 +63,7 @@ namespace FindHelperApi.Controllers
         //[Route("name")]
         //public ActionResult<List<User>> GetByName(string name)
         //{
-        //    var users = _userService.GetByName(name);
+        //    var users = _userService.GetUserByName(name);
         //    return Ok(users);
         //}//TODO: fix function... implements how to get user by name with entity framework
         #endregion

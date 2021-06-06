@@ -78,7 +78,7 @@ namespace FindHelperApi.Services
 
             if (userFriendRequest == null)
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
+                throw new HttpStatusCodeException(HttpStatusCode.NotFound, "Não há solicitação de amizade");
             }
             else if (userFriendRequest.Status == true)
             {
