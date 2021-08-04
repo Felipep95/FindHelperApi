@@ -44,6 +44,11 @@ namespace FindHelperApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FindHelperApi", Version = "v1" });
             });
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod());//https://www.c-sharpcorner.com/article/enabling-cors-in-asp-net-core-api-application/
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +60,8 @@ namespace FindHelperApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FindHelperApi v1"));
             }
+
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseHttpsRedirection();
 
