@@ -28,13 +28,13 @@ namespace FindHelperApi.Controllers
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateNewPublication([ModelBinder(BinderType = typeof(JsonModelBinder))] CreatePublicationDTO publicationDTO,
-        IFormFile file)
+        public async Task<ActionResult> CreateNewPublication(/*[ModelBinder(BinderType = typeof(JsonModelBinder))]*/ CreatePublicationDTO publicationDTO/*,
+        IFormFile file*/)
         {
             if (!ModelState.IsValid || publicationDTO == null)
                 return BadRequest();
 
-            var publicationCreated = await _publicationService.SaveAsync(publicationDTO, file);
+            var publicationCreated = await _publicationService.SaveAsync(publicationDTO/*, file*/);
             return CreatedAtAction(nameof(CreateNewPublication), new { id = publicationCreated.Id }, publicationCreated);
         }
 

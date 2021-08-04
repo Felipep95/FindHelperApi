@@ -38,7 +38,7 @@ namespace FindHelperApi.Helper.CustomExceptions
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     default:
-                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
                 }
 

@@ -27,13 +27,13 @@ namespace FindHelperApi.Services
             _configuration = configuration;
         }
 
-        public async Task<GETPublicationDTO> SaveAsync(CreatePublicationDTO publicationDTO, IFormFile file)
+        public async Task<GETPublicationDTO> SaveAsync(CreatePublicationDTO publicationDTO/*, IFormFile file*/)
         {
             var newPublication = new Publication();
 
             newPublication.Description = publicationDTO.description;
             newPublication.Date = publicationDTO.date;
-            newPublication.Photo = SaveImage(file);
+            //newPublication.Photo = SaveImage(file);
             newPublication.UserId = publicationDTO.userId;
 
             _context.Publications.Add(newPublication);
@@ -44,7 +44,7 @@ namespace FindHelperApi.Services
             getPublicationDTO.Id = newPublication.Id;
             getPublicationDTO.Description = newPublication.Description;
             getPublicationDTO.Data = newPublication.Date;
-            getPublicationDTO.Photo = newPublication.Photo;
+            //getPublicationDTO.Photo = newPublication.Photo;
             getPublicationDTO.UserId = newPublication.UserId;
             
             return getPublicationDTO;
@@ -63,7 +63,7 @@ namespace FindHelperApi.Services
                 newGetPublicationDto.Id = publications[i].Id;
                 newGetPublicationDto.Data = publications[i].Date;
                 newGetPublicationDto.Description = publications[i].Description;
-                newGetPublicationDto.Photo = GetImageFromWwwroot(publications[i].Photo);
+                //newGetPublicationDto.Photo = GetImageFromWwwroot(publications[i].Photo);
                 newGetPublicationDto.UserId = publications[i].UserId;
 
                 listGetPublicationDto.Add(newGetPublicationDto);
@@ -72,44 +72,47 @@ namespace FindHelperApi.Services
             return listGetPublicationDto;
         }
 
-        public string SaveImage(IFormFile objectFile)
-        {
-            try
-            {
-                if (objectFile.Length > 0)
-                {
-                    string path = _webHostEnvironment.WebRootPath + "\\images\\";
+        //public string SaveImage(IFormFile objectFile)
+        //{
+        //    try
+        //    {
+        //        if (objectFile.Length > 0)
+        //        {
+        //            string path = _webHostEnvironment.WebRootPath + "\\images\\";
 
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
+        //            if (!Directory.Exists(path))
+        //            {
+        //                Directory.CreateDirectory(path);
+        //            }
 
-                    using (FileStream fileStream = File.Create(path + objectFile.FileName))
-                    {
-                        objectFile.CopyTo(fileStream);
-                        fileStream.Flush();
-                        return objectFile.FileName;
-                    }
-                }
-                else
-                {
-                    return "Not uploaded";
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+        //            if (objectFile.Length == 0)
+        //                return objectFile.ToString();
 
-        //https://stackoverflow.com/questions/42587428/get-image-from-wwwroot-images-in-asp-net-core
-        public string GetImageFromWwwroot(string image)
-        {
-            var pathServer = _configuration.GetValue<string>("MySettings:PathsServer");
-            var path = "https://" + pathServer + "/images/" + image;
-            return path;
-        }
+        //            using (FileStream fileStream = File.Create(path + objectFile.FileName))
+        //            {
+        //                objectFile.CopyTo(fileStream);
+        //                fileStream.Flush();
+        //                return objectFile.FileName;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return "Not uploaded";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.Message;
+        //    }
+        //}
+
+        ////https://stackoverflow.com/questions/42587428/get-image-from-wwwroot-images-in-asp-net-core
+        //public string GetImageFromWwwroot(string image)
+        //{
+        //    var pathServer = _configuration.GetValue<string>("MySettings:PathsServer");
+        //    var path = "https://" + pathServer + "/images/" + image;
+        //    return path;
+        //}
     }
 }
 

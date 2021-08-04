@@ -13,6 +13,8 @@ namespace FindHelperApi.Models.DTO.FriendRequestDTO
 
         public int UserIdReceveidSolicitation { get; set; } 
 
-        public bool Status { get; set; } 
+        public bool Status { get; set; }
+
+        public bool IsFriend { get; set; }
     }
 }

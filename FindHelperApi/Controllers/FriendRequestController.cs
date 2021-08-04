@@ -22,7 +22,7 @@ namespace FindHelperApi.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<GETFriendRequestDTO>> Create(CREATEFriendRequestDTO friendRequestDTO)
+        public async Task<ActionResult <GETFriendRequestDTO>> Create(CREATEFriendRequestDTO friendRequestDTO)
         {
             if (!ModelState.IsValid)
                 return Problem(statusCode: 400, title: "Formato de dado inválido");
@@ -31,22 +31,7 @@ namespace FindHelperApi.Controllers
             return CreatedAtAction(nameof(Create), new { id = createdFriendRequest.Id }, createdFriendRequest);
 
             #region GetFriendRequestResponse
-            //if (friendRequest.Status == true)
-            //{
-            //    var friendList = new FriendList();
-            //    friendList.UserFriendId = friendRequest.UserIdReceveidSolicitation;
-            //    friendList.UserId = friendRequest.UserIdSolicitation;
-            //    // se o status do friendRequest for true, então adicionar o UserIdSolicitation e UserIdReceveidSolicitation na tabela FriendList
-            //    //await _friendRequestService.InsertAsync(friendRequest);
-            //    await _friendListService.InsertAsync(friendList);
-            //    return CreatedAtAction(nameof(Create), new { id = friendRequest.Id }, friendRequest);
-            //}
-            //else
-            //{
-            //    await _friendRequestService.RemoveAsync(friendRequest.Id);//return notfound ou bad request
-            //    return BadRequest();
-            //}
-            //return friendRequest;
+            
             #endregion
         }
             
@@ -56,6 +41,17 @@ namespace FindHelperApi.Controllers
         {
             var friendRequests = await _friendRequestService.FindAllAsync();
             return Ok(friendRequests);
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public async Task<ActionResult<GETFriendRequestDTO>> Update(CREATEFriendRequestDTO friendRequestDTO)
+        {
+            if (!ModelState.IsValid)
+                return Problem(statusCode: 400, title: "Formato de dado inválido");
+
+            var updatedFriendRequest = await _friendRequestService.FriendRequestResponse(friendRequestDTO);
+            return CreatedAtAction(nameof(Create), new { id = updatedFriendRequest.Id }, updatedFriendRequest);
         }
     }
 }

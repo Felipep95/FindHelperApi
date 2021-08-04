@@ -69,6 +69,7 @@ namespace FindHelperApi.Services
 
             if (user == null)
                 throw new Exception("Usuário não encontrado");
+            //return NotFound("Usuário não encontrado");
 
             var getUserDto = new GETUserDTO();
 

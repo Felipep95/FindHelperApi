@@ -4,8 +4,8 @@
     {
         public int UserIdSolicitation { get; set; } 
 
-        public int UserIdReceveidSolicitation { get; set; } 
+        public int UserIdReceveidSolicitation { get; set; }
 
-        public bool Status { get; set; } 
+        public bool IsFriend { get; set; }
     }
 }
